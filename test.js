@@ -43,11 +43,10 @@ function setup (obj, cb) {
       get (target, path, receiver) {
 
         // console.log({ target, path, receiver, that: this})
-
-        const value = ?
-
+        
+        const value = target[path]
         cb(path, 'get', value)
-        return value
+        return value 
 
         // return this.nest()
       },
@@ -72,14 +71,20 @@ test('if access of property, callbck is called with path a', t => {
   })
 
   t.is(proxy.a, '')
-
-  // t.pass()
 })
 
 
+// TODO: write second testcase, if it doesn't work, chnge setup function, rerun all tests to make sure that nothing broke
+test('if callback is called with path i.b.c.d.a', t => {
+    t.plan(4)
+    const proxy = setup(testObj, (path, action, value) => {
+        t.is(path, 'i.b.c.d.a')
+        t.is(action, 'get')
+        t.is(value, 'nothing to see here')
+    })
 
-// console.log(proxy.i.b.c.d.a)
-// // callback is called with path 'i.b.c.d.a'
+    t.is(proxy.i.b.c.d.a, 'nothing to see here')
+})
 
 // const foo = proxy.i.b.c.d.a
 // console.log(foo)
