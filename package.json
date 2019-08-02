@@ -1,0 +1,25 @@
+{
+  "name": "deep-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "testing.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudless-hq/deep-proxy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cloudless-hq/deep-proxy/issues"
+  },
+  "homepage": "https://github.com/cloudless-hq/deep-proxy#readme",
+  "dependencies": {
+    "proxy-deep": "^2.1.1"
+  },
+  "devDependencies": {
+    "ava": "^2.2.0"
+  }
+}
