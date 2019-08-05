@@ -76,7 +76,7 @@ test('if access of property, callbck is called with path a', t => {
 
 // TODO: write second testcase, if it doesn't work, chnge setup function, rerun all tests to make sure that nothing broke
 test('if callback is called with path i.b.c.d.a', t => {
-    t.plan(4)
+    // t.plan(4)
     const proxy = setup(testObj, (path, action, value) => {
         t.is(path, 'i.b.c.d.a')
         t.is(action, 'get')
