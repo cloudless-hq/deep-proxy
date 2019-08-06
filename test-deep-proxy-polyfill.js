@@ -31,28 +31,17 @@ const testObj = {
   }
 }
 
-// TODO: create test out of following
-const path = []
-const value = ''
-function getHandler (obj, key, root, keys) {
-  path.push(key)
-  return obj[key]
-};
+function setup (origObj, cb) {
+  return deepProxy(origObj, { get: (innerObj, key, root, keys) => {
+   console.log(keys, key)
+    const path = [...keys, key]
 
-function setup (obj) {
-  return deepProxy(obj, { get: getHandler })
+    cb(path, 'get', innerObj[key])
+    return innerObj[key]
+  } })
 }
 
-const proxy = setup(testObj)
-
-const foo = proxy.i.a
-
-console.log(path) // output: ['i', 'a']
-console.log(testObj[path[0]][path[1]]) // output: 'vincent'
-console.log('get') // TODO: get action from deepProxy
-// END TODO
-
-test('if access of property, callbck is called with path a', t => {
+test('[1] if access of property, callbck is called with path a', t => {
   t.plan(4)
 
   const proxy = setup(testObj, (path, action, value) => {
@@ -63,3 +52,16 @@ test('if access of property, callbck is called with path a', t => {
 
   t.is(proxy.a, '')
 })
+
+test('[2] if access of property, callbck is called with path i.a', t => {
+    t.plan(4)
+  
+    const proxy = setup(testObj, (path, action, value) => {
+      t.is(path, ['i', 'a'])
+      t.is(action, 'get')
+      t.is(value, 'vincent')
+      
+    })
+    t.is(proxy.i.a, 'vincent')
+  })
+  
