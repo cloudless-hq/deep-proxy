@@ -63,10 +63,7 @@ function init (data, cb, delim) {
 
 exports.default = init
 
-
-
-
-
+/*
 let proxy = init({}, (path, value, action) => {
   console.log('----------')
   console.log({ path, value, action })
@@ -93,4 +90,4 @@ console.log(proxy.x.y.z['1$'])
 console.log(proxy._secret = 'easily scared')
 
 // console.log(proxy.c())
-
+ */
