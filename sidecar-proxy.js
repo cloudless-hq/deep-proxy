@@ -15,7 +15,7 @@ function init (data, cb, delim) {
     },
     getOwnPropertyDescriptor (oTarget, sKey) {
       console.error('error: calling `getOwnPropertyDescriptor` on atreyu proxy.')
-      return { configurable: true, enumerable: true, value: 5 }
+      return { configurable: true, enumerable: false, value: 5 }
     },
     apply (target, thisArg, argumentsList) {
       console.error('error: calling apply on atreyu proxy.')
@@ -38,7 +38,12 @@ function init (data, cb, delim) {
     return new Proxy({}, {
       ...errorHandlers,
       get (obj, prop) {
-        let path = [...root]
+        const path = [...root]
+        console.log(prop)
+
+        if (typeof prop !== 'string') {
+          return () => {}
+        }
         if (!delim || prop.endsWith(delim)) {
           if (delim) {
             prop = prop.slice(0, -1)
@@ -61,7 +66,7 @@ function init (data, cb, delim) {
   return objProxy([])
 }
 
-exports.default = init
+module.exports = init
 
 /*
 let proxy = init({}, (path, value, action) => {
