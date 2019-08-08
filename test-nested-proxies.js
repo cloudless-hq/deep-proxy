@@ -1,5 +1,5 @@
 import test from 'ava'
-import deepProxy from 'nested-proxies/lib/DeepProxy'
+import DeepProxy from 'nested-proxies'
 
 const testObj = {
   a: '',
@@ -32,11 +32,18 @@ const testObj = {
 }
 
 function setup (origObj, cb) {
-  return deepProxy(origObj, {
+  return new DeepProxy(origObj, {
     getLeaf: (target, property, receiver, path) => {
-      console.log({ target, property, receiver, path })
-      cb(path, 'get', target[property])
-      return path + ':' + target[property]
+      if (path.endsWith('$')) {
+        path = path.slice(0, -1)
+        if (property.endsWith('$')) {
+          property = property.slice(0, -1)
+        }
+        cb(path, 'get', target[property])
+      } else {
+        cb(path, 'get', target[property])
+      }
+      return target[property]
     } })
 }
 
@@ -44,19 +51,60 @@ test('[1] if access of property, callbck is called with path a', t => {
   t.plan(4)
 
   const proxy = setup(testObj, (path, action, value) => {
-    t.is(path, ['a'])
+    t.is(path, 'a')
     t.is(action, 'get')
     t.is(value, '')
   })
   t.is(proxy.a, '')
 })
 
-// test('[2] if access of property, callbck is called with path i.a', t => {
-//   t.plan(4)
-//   const proxy = setup(testObj, (path, action, value) => {
-//     t.is(path, ['i', 'a'])
-//     t.is(action, 'get')
-//     t.is(value, 'vincent')
-//   })
-//   t.is(proxy.i.a, 'vincent')
-// })
+test('[2] if access of property, callbck is called with path i.a', t => {
+  t.plan(4)
+  const proxy = setup(testObj, (path, action, value) => {
+    t.is(path, 'i.a')
+    t.is(action, 'get')
+    t.is(value, 'vincent')
+  })
+  t.is(proxy.i.a, 'vincent')
+})
+
+test('[3] if access of property, callbck is called with path i.b.a', t => {
+  t.plan(4)
+  const proxy = setup(testObj, (path, action, value) => {
+    t.is(path, 'i.b.a')
+    t.is(action, 'get')
+    t.is(value, 'not vincent')
+  })
+  t.is(proxy.i.b.a, 'not vincent')
+})
+
+test('[4] if access of property, callbck is called with path i.b.a$', t => {
+  t.plan(4)
+  const proxy = setup(testObj, (path, action, value) => {
+    t.is(path, 'i.b.a')
+    t.is(action, 'get')
+    t.is(value, 'not vincent')
+  })
+  t.is(proxy.i.b.a$, 'not vincent')
+})
+
+test('[5] if access of property, callbck is called with path xxx (undefined path)', t => {
+  t.plan(4)
+  const proxy = setup(testObj, (path, action, value) => {
+    t.is(path, 'i.xxx')
+    t.is(action, 'get')
+    t.is(value, undefined)
+  })
+  t.is(proxy.i.xxx, undefined)
+})
+
+test('[6] if access of property, callbck is called with path xxx.xxx (undefined path)', t => {
+  t.plan(4)
+  const proxy = setup(testObj, (path, action, value) => {
+    console.log({ path, action, value })
+    t.is(path, 'xxx')
+    t.is(action, 'get')
+    t.is(value, undefined)
+  })
+  t.is(proxy.xxx.xxx, undefined)
+})
