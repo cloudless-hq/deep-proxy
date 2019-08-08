@@ -17,11 +17,15 @@
   },
   "homepage": "https://github.com/cloudless-hq/deep-proxy#readme",
   "dependencies": {
-    "standard": "^13.1.0"
+    "deep-proxy-polyfill": "^1.0.4",
+    "nested-proxies": "^0.1.8",
+    "proxy-deep": "git+https://github.com/btjones/js-proxy-deep.git",
+    "proxyfull": "^1.0.0",
+    "recursive-object-proxy": "^1.0.0",
+    "recursive-proxy": "^1.1.0"
   },
   "devDependencies": {
     "ava": "^2.2.0",
-    "deep-proxy-polyfill": "^1.0.4",
-    "proxy-deep": "git+https://github.com/btjones/js-proxy-deep.git"
+    "standard": "^13.1.0"
   }
 }
