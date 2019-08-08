@@ -38,23 +38,24 @@ function setup (origObj, cb) {
 }
 
 test('[1] if access of property, callbck is called with path a', t => {
-  t.plan(4)
+  t.plan(2)
 
   const proxy = setup(testObj, (path, value) => {
-    t.is(path, 'a')
+    t.deepEqual(path, ['a'])
     t.is(value, '')
   })
-  t.is(proxy.a, '')
+
+  proxy.a$ === undefined
 })
 
-// test('[2] if access of property, callbck is called with path i.a', t => {
-//   t.plan(4)
-//   const proxy = setup(testObj, (path, value) => {
-//     t.is(path, 'i.a')
-//     t.is(value, 'vincent')
-//   })
-//   t.is(proxy.i.a, 'vincent')
-// })
+test('[2] if access of property, callbck is called with path i.a', t => {
+  t.plan(2)
+  const proxy = setup(testObj, (path, value) => {
+    t.deepEqual(path, ['i', 'a'])
+    t.is(value, 'vincent')
+  })
+  proxy.i.a$ === undefined
+})
 
 // test('[3] if access of property, callbck is called with path i.b.a', t => {
 //   t.plan(4)
@@ -83,11 +84,11 @@ test('[1] if access of property, callbck is called with path a', t => {
 //   t.is(proxy.i.xxx, undefined)
 // })
 
-// test('[6] if access of property, callbck is called with path xxx.xxx (undefined path)', t => {
-//   t.plan(4)
-//   const proxy = setup(testObj, (path, value) => {
-//     t.is(path, 'xxx')
-//     t.is(value, undefined)
-//   })
-//   t.is(proxy.xxx.xxx, undefined)
-// })
+test('[6] if access of property, callbck is called with path xxx.xxx (undefined path)', t => {
+  t.plan(2)
+  const proxy = setup(testObj, (path, value) => {
+    t.deepEqual(path, ['xxx', 'xxx'])
+    t.is(value, undefined)
+  })
+  proxy.xxx.xxx$ === undefined
+})
