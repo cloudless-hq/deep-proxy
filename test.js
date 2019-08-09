@@ -34,7 +34,8 @@ const testObj = {
 function setup (origObj, cb) {
   return init(origObj, (path, value) => {
     cb(path, value)
-  }, '$')
+    return value
+  }, { delim: '$', returnPathOnEmpty: true })
 }
 
 test('[1] if access of property, callbck is called with path a', t => {
@@ -85,6 +86,15 @@ test('[2] if access of property, callbck is called with path i.a', t => {
 // })
 
 test('[6] if access of property, callbck is called with path xxx.xxx (undefined path)', t => {
+  t.plan(2)
+  const proxy = setup(testObj, (path, value) => {
+    t.deepEqual(path, ['xxx', 'xxx'])
+    t.is(value, undefined)
+  })
+  proxy.xxx.xxx$ === undefined
+})
+
+test('[7] if access of property, callbck is called with path  (undefined path)', t => {
   t.plan(2)
   const proxy = setup(testObj, (path, value) => {
     t.deepEqual(path, ['xxx', 'xxx'])
