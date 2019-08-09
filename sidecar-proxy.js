@@ -1,8 +1,24 @@
+function makePaths ({ name, path, root }) {
+  const isPathEnd = name.endsWith('$')
+  let cleanName
+  if (isPathEnd) {
+    cleanName = name.slice(0, -1)
+  } else {
+    cleanName = name
+  }
+  const relPath = path.concat(cleanName)
+  let fullPath = relPath.map((ele) => !isNaN(Number(ele)) ? Number(ele) : ele)
+  if (root) {
+    fullPath = root.concat(fullPath)
+  }
+  return { isPathEnd, parsedPath: fullPath, cleanName }
+}
+
 function init (data, cb, delim) {
-  let virtual = false
+  const virtual = false
   // performance of memoization?
 
-  let errorHandlers = {
+  const errorHandlers = {
     // has () {
     //   console.error('error: calling `has` on atreyu proxy.')
     //   return true
@@ -39,30 +55,24 @@ function init (data, cb, delim) {
       ...errorHandlers,
       get (obj, prop) {
         const path = [...rootPath]
-
         if (typeof prop !== 'string') {
           console.warn('non string key access')
           return () => {}
         }
-
         if (!delim.delim || prop.endsWith(delim.delim)) {
           if (delim.delim) {
             prop = prop.slice(0, -1)
           }
-
           path.push(prop)
+
           return cb(path, subObj[prop])
         } else {
           path.push(prop)
         }
 
-        // console.log(subObj[prop])
-        // console.log(typeof subObj[prop])
-
         if (typeof subObj[prop] === 'undefined') {
           return objProxy(path, {})
         }
-
         if (typeof subObj[prop] !== 'object') {
           return subObj[prop]
         }
@@ -77,7 +87,6 @@ function init (data, cb, delim) {
 
   return objProxy([], data)
 }
-
 module.exports = init
 
 /*
