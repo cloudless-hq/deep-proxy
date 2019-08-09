@@ -45,13 +45,13 @@ function init (data, cb, delim) {
           return () => {}
         }
 
-        if (!delim || prop.endsWith(delim)) {
-          if (delim) {
+        if (!delim.delim || prop.endsWith(delim.delim)) {
+          if (delim.delim) {
             prop = prop.slice(0, -1)
           }
 
           path.push(prop)
-          cb(path, subObj[prop])
+          return cb(path, subObj[prop])
         } else {
           path.push(prop)
         }
