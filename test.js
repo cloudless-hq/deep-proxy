@@ -137,3 +137,22 @@ test('[11] if access of property, callbck is called with path [0][1]', t => {
   })
   proxy['0']['1$'] === undefined
 })
+
+test('[12] proxying an array returns an array', t => {
+  t.plan(3)
+  const proxy = setup(testObj, (path, value) => {
+    t.deepEqual(path, ['h'])
+    t.is(value, testObj.h)
+  })
+  t.is(Array.isArray(proxy.h$), true)
+})
+
+test('[13] array methods', t => {
+  t.plan(6)
+  const proxy = setup(testObj, (path, value) => {
+    t.deepEqual(path, ['h'])
+    t.is(value, testObj.h)
+  })
+  t.is(proxy.h$.length, 3)
+  t.is(proxy.h$.forEach((element) => true))
+})
