@@ -1,5 +1,5 @@
-function makePaths ({ name, path, root }) {
-  const isPathEnd = name.endsWith('$')
+function makePaths ({ name, path, root, delim }) {
+  const isPathEnd = name.endsWith(delim)
   let cleanName
   if (isPathEnd) {
     cleanName = name.slice(0, -1)
@@ -14,8 +14,8 @@ function makePaths ({ name, path, root }) {
   return { isPathEnd, parsedPath: fullPath, cleanName }
 }
 
-function init (data, cb, delim) {
-  const virtual = false
+function init (data, cb, { delim }) {
+  // const virtual = false
   // performance of memoization?
 
   const errorHandlers = {
@@ -59,16 +59,18 @@ function init (data, cb, delim) {
           console.warn('non string key access')
           return () => {}
         }
-        if (!delim.delim || prop.endsWith(delim.delim)) {
-          if (delim.delim) {
-            prop = prop.slice(0, -1)
-          }
-          path.push(prop)
 
-          return cb(path, subObj[prop])
-        } else {
-          path.push(prop)
+
+
+
+// use makePaths function here instead of manual delim handling
+        if (...isEnd) {
+          return cb(path, subObj[cleanName])
         }
+
+// if cleanName is length return 0 imediately with callback :
+// return cb(path, 0)
+
 
         if (typeof subObj[prop] === 'undefined') {
           return objProxy(path, {})

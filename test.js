@@ -10,7 +10,23 @@ const testObj = {
     return true
   },
   g: false,
-  h: ['mon', { a: 44, b: 42 }, 'wed'],
+  h: [
+    {
+      a: {
+        b: 11
+      }
+    },
+    {
+      a: {
+        b: 22
+      }
+    },
+    {
+      a: {
+        b: 33
+      }
+    }
+  ],
   i: {
     a: 'vincent',
     b: {
@@ -166,17 +182,31 @@ function setup (origObj, cb) {
 //   t.is(proxy[0][1]['2$'], undefined)
 // })
 
+// test('[15]', t => {
+//   t.plan(1)
+//   const proxy = setup(testObj, (path, value) => {
+//     console.log({ path, value })
+//     //t.is(value, undefined)
+//   })
+//
+//   for (let i = 0; i < proxy.h.length; i++) {
+//     console.log('this should run 3 times')
+//     console.log(proxy.h[i].a.b$)
+//   }
+// })
+
 test('[15]', t => {
-  t.plan(1)
+  t.plan(0)
   const proxy = setup(testObj, (path, value) => {
-    t.is(value, undefined)
+    console.log({ path, value })
+    // needs to be called !
+    //t.is(value, undefined)
   })
-  for (let i = 0; i < proxy.h.length; i++) {
-    console.log('this should run 3 times')
-    console.log(proxy.h[0].a.b$)
+
+  console.log(proxy.virtobj.length)
+
+  for (let i = 0; i < proxy.virtobj.length; i++) {
+    console.log('this should run 0 times')
+    console.log(proxy.h[i].a.b$)
   }
 })
-
-// for (let i = 0; i < proxy.arry.length; i++) {
-//   console.log(proxy.arry[i].a.b$)
-// }
