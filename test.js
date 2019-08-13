@@ -112,7 +112,7 @@ test('[6] if access of property, callbck is called with path xxx.xxx (undefined 
 test('[7] if access of property, callbck is called with path h[1].a', t => {
   t.plan(2)
   const proxy = setup(testObj, (path, value) => {
-    t.deepEqual(path, ['h', '1', 'a'])
+    t.deepEqual(path, ['h', 1, 'a'])
     t.deepEqual(value, {
       b: 22
     })
@@ -148,7 +148,7 @@ test('[8] if access of property, callbck is called with path h', t => {
 test('[9] if access of property, callbck is called with path h0', t => {
   t.plan(2)
   const proxy = setup(testObj, (path, value) => {
-    t.deepEqual(path, ['h', '0'])
+    t.deepEqual(path, ['h', 0])
     t.deepEqual(value, {
       a: {
         b: 11
@@ -161,7 +161,7 @@ test('[9] if access of property, callbck is called with path h0', t => {
 test('[10] if access of property, callbck is called with path [5]', t => {
   t.plan(2)
   const proxy = setup(testObj, (path, value) => {
-    t.deepEqual(path, ['h', '5'])
+    t.deepEqual(path, ['h', 5])
     t.is(value, undefined)
   })
   proxy.h['5$'] === undefined
@@ -170,10 +170,10 @@ test('[10] if access of property, callbck is called with path [5]', t => {
 test('[11] if access of property, callbck is called with path [0][1]', t => {
   t.plan(2)
   const proxy = setup(testObj, (path, value) => {
-    t.deepEqual(path, ['0', '1'])
+    t.deepEqual(path, [0, 1])
     t.is(value, undefined)
   })
-  proxy['0']['1$'] === undefined
+  proxy[0]['1$'] === undefined
 })
 
 test('[12] proxying an array returns an array', t => {
@@ -198,7 +198,7 @@ test('[13] array methods', t => {
 test('[14] array methods for non existing arrays', t => {
   t.plan(3)
   const proxy = setup(testObj, (path, value) => {
-    t.deepEqual(path, ['0', '1', '2'])
+    t.deepEqual(path, [0, 1, 2])
     t.is(value, undefined)
   })
   t.is(proxy[0][1]['2$'], undefined)
