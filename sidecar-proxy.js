@@ -60,21 +60,22 @@ function init (data, cb, { delim }) {
           return () => {}
         }
 
+        // use makePaths function here instead of manual delim handling
+        const cleanPath = makePaths({ name: prop, path, rootPath, delim })
+        path.push(cleanPath.cleanName)
 
-
-
-// use makePaths function here instead of manual delim handling
-        if (...isEnd) {
-          return cb(path, subObj[cleanName])
+        if (cleanPath.cleanName === 'length') {
+          return cb(path, 0)
         }
 
-// if cleanName is length return 0 imediately with callback :
-// return cb(path, 0)
-
+        if (cleanPath.isPathEnd) {
+          return cb(path, subObj[cleanPath.cleanName])
+        }
 
         if (typeof subObj[prop] === 'undefined') {
           return objProxy(path, {})
         }
+
         if (typeof subObj[prop] !== 'object') {
           return subObj[prop]
         }
